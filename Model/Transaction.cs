@@ -14,7 +14,6 @@ namespace LibrarianX.Model
         public DateTime CheckoutDate { get; set; }
         [Required]
         public DateTime DueDate { get; set; }
-        [Required]
         public DateTime? ReturnDate { get; set; } 
         
         public Book Book { get; set; }
