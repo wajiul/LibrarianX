@@ -1,4 +1,5 @@
 using LibrarianX.Data;
+using LibrarianX.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,7 @@ builder.Services.AddDbContext<LibrarianXDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
+builder.Services.AddScoped<AuthorRepository, AuthorRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

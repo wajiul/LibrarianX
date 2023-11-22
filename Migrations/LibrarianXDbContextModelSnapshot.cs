@@ -25,10 +25,7 @@ namespace LibrarianX.Migrations
             modelBuilder.Entity("LibrarianX.Model.Author", b =>
                 {
                     b.Property<int>("AuthorId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorId"));
 
                     b.Property<string>("AuthorName")
                         .IsRequired()
@@ -86,7 +83,6 @@ namespace LibrarianX.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ReturnDate")
-                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
