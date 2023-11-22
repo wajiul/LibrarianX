@@ -15,6 +15,7 @@ builder.Services.AddDbContext<LibrarianXDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<AuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<BookRepository, BookRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
