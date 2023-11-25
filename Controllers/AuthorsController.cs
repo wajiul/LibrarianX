@@ -66,11 +66,21 @@ namespace LibrarianX.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAuthor([FromBody] AuthorDto authorDto)
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateAuthor(int id, [FromBody] AuthorDto authorDto)
         {
+            if(id != authorDto.AuthorId)
+            {
+                return BadRequest();
+            }
+
             try
             {
-                await _authorRepository.UpdateAuthorAsync(authorDto);
+                var status = await _authorRepository.UpdateAuthorAsync(authorDto);
+                if(status == false)
+                {
+                    return BadRequest();
+                }
                 return Ok("Updated successfully");
             }
             catch(Exception)
@@ -84,7 +94,12 @@ namespace LibrarianX.Controllers
         {
             try
             {
-                await _authorRepository.DeleteAuthorAsync(id);
+                var status = await _authorRepository.DeleteAuthorAsync(id);
+                if(status == false)
+                {
+                    return BadRequest();
+                }
+
                 return Ok("Deleted successfully");
             }
             catch (Exception)

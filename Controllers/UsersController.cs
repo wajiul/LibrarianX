@@ -72,18 +72,17 @@ namespace LibrarianX.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDto userDto)
         {
+            if (id != userDto.UserId || userDto == null)
+            {
+                return BadRequest();
+            }
             try
             {
-                if (id != userDto.UserId || userDto == null)
+                var status = await _userRepository.UpdateUserAsync(userDto);
+                if(status == false)
                 {
                     return BadRequest();
                 }
-                var userExist = await _userRepository.UserExistAsync(userDto.Email);
-                if (!userExist)
-                {
-                    return BadRequest();
-                }
-                await _userRepository.UpdateUserAsync(userDto);
                 return Ok("Updated successfully");
 
             }
@@ -100,13 +99,14 @@ namespace LibrarianX.Controllers
         {
             try
             {
-                await _userRepository.DeleteUserAsync(id);
+                var status = await _userRepository.DeleteUserAsync(id);
+                if(status == false)
+                {
+                    return BadRequest();
+                }
                 return Ok("Deleted successfully");
             }
-            catch(InvalidOperationException)
-            {
-                return NotFound($"User with specified Id not found");
-            }
+
             catch(Exception)
             {
                 return StatusCode(500, new { Message = "Internal Server Error" });

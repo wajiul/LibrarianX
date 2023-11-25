@@ -67,24 +67,36 @@ namespace LibrarianX.Repository
             return null;
         }
 
-        public async Task UpdateUserAsync(UserDto userDto)
+        public async Task<bool> UpdateUserAsync(UserDto userDto)
         {
-            var user = await _context.Users.FindAsync(userDto.UserId);
-            user.Name = userDto.Name;
-            user.Phone = userDto.Phone;
-            await _context.SaveChangesAsync();
+            try
+            {
+                var user = new User()
+                {
+                    Name = userDto.Name,
+                    Phone = userDto.Phone
+                };
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+            catch(InvalidOperationException) 
+            {
+                return false;
+            }
         }
 
-        public async Task DeleteUserAsync(int userId)
+        public async Task<bool> DeleteUserAsync(int userId)
         {
 
             var user = await _context.Users.FindAsync(userId);
             if(user == null)
             {
-                throw new InvalidOperationException();
+                return false;
             }
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
+            return true;
         }
 
     }

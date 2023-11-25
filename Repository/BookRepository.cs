@@ -66,25 +66,39 @@ namespace LibrarianX.Repository
             };
         }
         
-        public async Task UpdateBookAsync(BookDto bookDto)
+        public async Task<bool> UpdateBookAsync(BookDto bookDto)
         {
-            var book = new Book()
+            try
             {
-                BookId = bookDto.BookId,
-                Title = bookDto.Title,
-                AuthorId = bookDto.AuthorId,
-                PublicationDate= bookDto.PublicationDate,
-                Genre = bookDto.Genre
-            };
-            _context.Books.Update(book);
-            await _context.SaveChangesAsync();
+                var book = new Book()
+                {
+                    BookId = bookDto.BookId,
+                    Title = bookDto.Title,
+                    AuthorId = bookDto.AuthorId,
+                    PublicationDate= bookDto.PublicationDate,
+                    Genre = bookDto.Genre
+                };
+                _context.Books.Update(book);
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
         }
 
-        public async Task DeleteBookAsync(int bookId)
+        public async Task<bool> DeleteBookAsync(int bookId)
         {
             var book = await _context.Books.FindAsync(bookId);
+            if(book == null)
+            {
+                return false;
+            }
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
+            return true;
         }
 
     }

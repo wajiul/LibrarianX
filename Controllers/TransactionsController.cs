@@ -74,7 +74,11 @@ namespace LibrarianX.Controllers
         {
             try
             {
-                await _transactionRepository.UpdateTransactionAsync(transactionDto);
+                var status = await _transactionRepository.UpdateTransactionAsync(transactionDto);
+                if(status == false)
+                {
+                    return BadRequest();
+                }
                 return Ok("Updated successfully");
             }
             catch (Exception)
@@ -89,7 +93,11 @@ namespace LibrarianX.Controllers
         {
             try
             {
-                await _transactionRepository.DeleteAsync(id);
+                var status = await _transactionRepository.DeleteTransactionAsync(id);
+                if(status == false)
+                {
+                    BadRequest();
+                }
                 return Ok("Deleted successfully");
             }
             catch(Exception)

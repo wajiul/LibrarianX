@@ -30,7 +30,7 @@ namespace LibrarianX.Repository
             return transactionDto;
         }
 
-        public async Task UpdateTransactionAsync(TransactionDto transactionDto)
+        public async Task<bool> UpdateTransactionAsync(TransactionDto transactionDto)
         {
             var transacton = new Transaction()
             {
@@ -41,15 +41,29 @@ namespace LibrarianX.Repository
                 DueDate = transactionDto.DueDate,
                 ReturnDate = transactionDto.ReturnDate
             };
-            _context.Transactions.Attach(transacton);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                _context.Transactions.Attach(transacton);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch(InvalidOperationException)
+            {
+                return false;
+            }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteTransactionAsync(int id)
         {
             var transaction = await _context.Transactions.FindAsync(id);
+            if (transaction == null)
+            {
+                return false;
+            }
             _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<List<TransactionDto>> GetTransactionsAsync()
@@ -86,21 +100,7 @@ namespace LibrarianX.Repository
             };
         }
 
-        public async Task<TransactionDto> GetTransactionByUserIdAsync(int userId)
-        {
-            var transaction = await _context.Transactions.FindAsync(userId);
-            return new TransactionDto()
-            {
-                Id = transaction.Id,
-                BookId = transaction.BookId,
-                UserId = transaction.UserId,
-                CheckoutDate = transaction.CheckoutDate,
-                DueDate = transaction.DueDate,
-                ReturnDate = transaction.ReturnDate
-            };
-        }
-
-
+       
         public async Task<List<TransactionDto>> GetTransactionsOfDueDateOverAsync()
         {
             var transactions = await _context.Transactions.Where(d => d.DueDate < DateTime.Now).Select(t => new TransactionDto()

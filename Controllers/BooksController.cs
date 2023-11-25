@@ -70,11 +70,21 @@ namespace LibrarianX.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateBook([FromBody] BookDto bookDto)
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateBook(int id, [FromBody] BookDto bookDto)
         {
+            if(id !=  bookDto.BookId)
+            {
+                return BadRequest();
+            }
             try
             {
-                await _bookRepository.UpdateBookAsync(bookDto);
+                var status = await _bookRepository.UpdateBookAsync(bookDto);
+                if(status == false)
+                {
+                    return BadRequest();
+                }
+
                 return Ok("Updated successfully");
             }
             catch(Exception)
@@ -89,7 +99,11 @@ namespace LibrarianX.Controllers
         {
             try
             {
-                await _bookRepository.DeleteBookAsync(id);
+                var status = await _bookRepository.DeleteBookAsync(id);
+                if(status == false)
+                {
+                    return BadRequest();
+                }
                 return Ok("Deleted successfully");
             }
             catch (Exception)

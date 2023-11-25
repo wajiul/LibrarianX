@@ -57,23 +57,36 @@ namespace LibrarianX.Repository
             return null;
         }
 
-        public async Task UpdateAuthorAsync(AuthorDto authorDto)
+        public async Task<bool> UpdateAuthorAsync(AuthorDto authorDto)
         {
-            var author = new Author()
+            try
             {
-                AuthorId = authorDto.AuthorId,
-                AuthorName = authorDto.AuthorName
-            };
+                var author = new Author()
+                {
+                    AuthorId = authorDto.AuthorId,
+                    AuthorName = authorDto.AuthorName
+                };
 
-            _context.Update(author);
-            await _context.SaveChangesAsync();
+                _context.Update(author);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (InvalidOperationException) 
+            {
+                return false;
+            }
         }
 
-        public async Task DeleteAuthorAsync(int authorId)
+        public async Task<bool> DeleteAuthorAsync(int authorId)
         {
             var author = await _context.Authors.FindAsync(authorId);
+            if(author == null)
+            {
+                return false;
+            }
             _context.Authors.Remove(author);
             await _context.SaveChangesAsync();
+            return true;
         }
 
     }
