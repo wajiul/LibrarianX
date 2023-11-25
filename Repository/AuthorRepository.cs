@@ -14,11 +14,11 @@ namespace LibrarianX.Repository
             _context = context;
         }
 
-        public async Task<bool> AuthorExist(string authorName)
+        public async Task<bool> AuthorExistAsync(string authorName)
         {
             return await _context.Authors.AnyAsync(a => a.AuthorName == authorName);
         }
-        public async Task<AuthorDto> AddAuthor(AuthorDto authorDto)
+        public async Task<AuthorDto> AddAuthorAsync(AuthorDto authorDto)
         {
             var author = new Author()
             {
@@ -32,7 +32,7 @@ namespace LibrarianX.Repository
             return authorDto;
         }
 
-        public async Task<List<AuthorDto>> GetAuthors()
+        public async Task<List<AuthorDto>> GetAuthorsAsync()
         {
             return await _context.Authors.Select(a => new AuthorDto()
             {
@@ -42,7 +42,7 @@ namespace LibrarianX.Repository
             }).ToListAsync();
         }
 
-        public async Task<AuthorDto> GetAuthor(int authorId)
+        public async Task<AuthorDto> GetAuthorAsync(int authorId)
         {
            var author =  await _context.Authors.FindAsync(authorId);
 
@@ -55,6 +55,25 @@ namespace LibrarianX.Repository
                 };
             }
             return null;
+        }
+
+        public async Task UpdateAuthorAsync(AuthorDto authorDto)
+        {
+            var author = new Author()
+            {
+                AuthorId = authorDto.AuthorId,
+                AuthorName = authorDto.AuthorName
+            };
+
+            _context.Update(author);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAuthorAsync(int authorId)
+        {
+            var author = await _context.Authors.FindAsync(authorId);
+            _context.Authors.Remove(author);
+            await _context.SaveChangesAsync();
         }
 
     }
