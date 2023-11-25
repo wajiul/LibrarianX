@@ -54,12 +54,12 @@ namespace LibrarianX.Controllers
         }
 
         [HttpGet]
-        [Route("{userId}")]
-        public async Task<IActionResult> GetUser(int userId)
+        [Route("{id}")]
+        public async Task<IActionResult> GetUser(int id)
         {
             try
             {
-                var user = await _userRepository.GetUserAsync(userId);
+                var user = await _userRepository.GetUserAsync(id);
                 return Ok(user);
             }
             catch (Exception)
@@ -69,11 +69,12 @@ namespace LibrarianX.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(int userId, [FromBody] UserDto userDto)
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDto userDto)
         {
             try
             {
-                if (userId != userDto.UserId || userDto == null)
+                if (id != userDto.UserId || userDto == null)
                 {
                     return BadRequest();
                 }
@@ -94,12 +95,12 @@ namespace LibrarianX.Controllers
         }
 
         [HttpDelete]
-        [Route("{userId}")]
-        public async Task<IActionResult> DeleteUser(int userId)
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
-                await _userRepository.DeleteUserAsync(userId);
+                await _userRepository.DeleteUserAsync(id);
                 return Ok("Deleted successfully");
             }
             catch(InvalidOperationException)

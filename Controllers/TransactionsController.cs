@@ -99,12 +99,12 @@ namespace LibrarianX.Controllers
         }
 
         [HttpGet]
-        [Route("user/{userId}")]
-        public async Task<IActionResult> TransactionOfUser(int userId)
+        [Route("user/{id}")]
+        public async Task<IActionResult> TransactionOfUser(int id)
         {
             try
             {
-                var transactions = await _transactionRepository.GetTransactionsOfUserAsync(userId);
+                var transactions = await _transactionRepository.GetTransactionsOfUserAsync(id);
                 if(transactions == null)
                 {
                     return NotFound();

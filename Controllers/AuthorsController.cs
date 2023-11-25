@@ -51,12 +51,12 @@ namespace LibrarianX.Controllers
             }
         }
 
-        [HttpGet("{authorId}")]
-        public async Task<IActionResult> GetAuthor(int authorId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAuthor(int id)
         {
             try
             {
-                var author = await _authorRepository.GetAuthorAsync(authorId);
+                var author = await _authorRepository.GetAuthorAsync(id);
                 return Ok(author);
             }
             catch (Exception)
@@ -79,12 +79,12 @@ namespace LibrarianX.Controllers
             }
         }
         [HttpDelete]
-        [Route("{authorId}")]
-        public async Task<IActionResult> DeleteAuthor(int authorId)
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteAuthor(int id)
         {
             try
             {
-                await _authorRepository.DeleteAuthorAsync(authorId);
+                await _authorRepository.DeleteAuthorAsync(id);
                 return Ok("Deleted successfully");
             }
             catch (Exception)

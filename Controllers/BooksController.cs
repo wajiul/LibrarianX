@@ -37,12 +37,12 @@ namespace LibrarianX.Controllers
         }
 
         [HttpGet]
-        [Route("{bookId}")]
-        public async Task<IActionResult> GetBook(int bookId)
+        [Route("{id}")]
+        public async Task<IActionResult> GetBook(int id)
         {
             try
             {
-                var book = await _bookRepository.GetBookAsync(bookId);
+                var book = await _bookRepository.GetBookAsync(id);
                 if(book == null)
                 {
                     return NotFound();
@@ -84,11 +84,12 @@ namespace LibrarianX.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteBook(int bookId)
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteBook(int id)
         {
             try
             {
-                await _bookRepository.DeleteBookAsync(bookId);
+                await _bookRepository.DeleteBookAsync(id);
                 return Ok("Deleted successfully");
             }
             catch (Exception)
