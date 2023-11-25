@@ -17,6 +17,7 @@ builder.Services.AddDbContext<LibrarianXDbContext>(option =>
 builder.Services.AddScoped<AuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<BookRepository, BookRepository>();
 builder.Services.AddScoped<UserRepository, UserRepository>();
+builder.Services.AddScoped<TransactionRepository, TransactionRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

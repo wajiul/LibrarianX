@@ -72,7 +72,6 @@ namespace LibrarianX.Repository
             var user = await _context.Users.FindAsync(userDto.UserId);
             user.Name = userDto.Name;
             user.Phone = userDto.Phone;
-
             await _context.SaveChangesAsync();
         }
 
