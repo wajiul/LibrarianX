@@ -14,12 +14,12 @@ namespace LibrarianX.Repository
             _context = context;
         }
 
-        public async Task<bool> BookExist(string bookTitle)
+        public async Task<bool> BookExistAsync(string bookTitle)
         {
             return await _context.Books.AnyAsync(b =>  b.Title == bookTitle);
         }
 
-        public async Task<BookDto> AddBook(BookDto bookDto)
+        public async Task<BookDto> AddBookAsync(BookDto bookDto)
         {
             var book = new Book()
             {
@@ -35,7 +35,7 @@ namespace LibrarianX.Repository
             return bookDto;
         }
 
-        public async Task<List<BookDto>> GetBooks()
+        public async Task<List<BookDto>> GetBooksAsync()
         {
             return await _context.Books.Select(b => new BookDto()
             {
@@ -48,7 +48,7 @@ namespace LibrarianX.Repository
             }).ToListAsync();
         }
 
-        public async Task<BookDto> GetBook(int bookId)
+        public async Task<BookDto> GetBookAsync(int bookId)
         {
             var book = await _context.Books.FindAsync(bookId);
             if(book == null)
@@ -66,6 +66,26 @@ namespace LibrarianX.Repository
             };
         }
         
+        public async Task UpdateBookAsync(BookDto bookDto)
+        {
+            var book = new Book()
+            {
+                BookId = bookDto.BookId,
+                Title = bookDto.Title,
+                AuthorId = bookDto.AuthorId,
+                PublicationDate= bookDto.PublicationDate,
+                Genre = bookDto.Genre
+            };
+            _context.Books.Update(book);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteBookAsync(int bookId)
+        {
+            var book = await _context.Books.FindAsync(bookId);
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }

@@ -21,12 +21,12 @@ namespace LibrarianX.Controllers
         {
             try
             {
-                var bookExist = await _bookRepository.BookExist(bookDto.Title);
+                var bookExist = await _bookRepository.BookExistAsync(bookDto.Title);
                 if(bookExist)
                 {
                     return Conflict(new { Message = "Book with specified bookId already exist" });
                 }
-                var addedBook = await _bookRepository.AddBook(bookDto);
+                var addedBook = await _bookRepository.AddBookAsync(bookDto);
                 return CreatedAtAction(nameof(GetBook), new {bookId = bookDto.BookId}, addedBook);
 
             }
@@ -42,7 +42,7 @@ namespace LibrarianX.Controllers
         {
             try
             {
-                var book = await _bookRepository.GetBook(bookId);
+                var book = await _bookRepository.GetBookAsync(bookId);
                 if(book == null)
                 {
                     return NotFound();
@@ -60,7 +60,7 @@ namespace LibrarianX.Controllers
         {
             try
             {
-                var books = await _bookRepository.GetBooks();
+                var books = await _bookRepository.GetBooksAsync();
                 return Ok(books);
             }
             catch(Exception)
@@ -68,5 +68,34 @@ namespace LibrarianX.Controllers
                 return StatusCode(500, new { Message = "Internal Server Srror" });
             }
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateBook([FromBody] BookDto bookDto)
+        {
+            try
+            {
+                await _bookRepository.UpdateBookAsync(bookDto);
+                return Ok("Updated successfully");
+            }
+            catch(Exception)
+            {
+                return StatusCode(500, new { Message = "Internal Server Srror" });
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBook(int bookId)
+        {
+            try
+            {
+                await _bookRepository.DeleteBookAsync(bookId);
+                return Ok("Deleted successfully");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { Message = "Internal Server Srror" });
+            }
+        }
+
     }
 }
